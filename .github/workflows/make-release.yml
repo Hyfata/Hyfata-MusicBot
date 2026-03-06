@@ -73,8 +73,5 @@ jobs:
           body: |
             ${{ github.event.inputs.info }}
             
-            ---
-            ### Setup
-            https://jmusicbot.com/setup  
-            https://jmusicbot.com/config  
-            # Download: [Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar](https://github.com/jagrosh/MusicBot/releases/download/${{ needs.build_jar.outputs.app_version }}/Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar)
+            ---  
+            # 다운로드: [Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar](https://github.com/Hyfata/Hyfata-MusicBot/releases/download/${{ needs.build_jar.outputs.app_version }}/Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar)
