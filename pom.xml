@@ -3,20 +3,24 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
     <artifactId>MusicBot</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <packaging>jar</packaging>
     
     <repositories>
+        <!-- DuncteBot/skybot-source-managers (archived) -->
         <repository>
             <id>m2.duncte123.dev</id>
             <name>m2-duncte123</name>
             <url>https://m2.duncte123.dev/releases</url>
         </repository>
+
+        <!-- JDA -->
         <repository>
             <id>dv8tion</id>
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
+
         <repository>
             <id>central</id>
             <name>bintray</name>
@@ -35,6 +39,7 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+
         <!-- Lavalink -->
         <repository>
             <id>arbjergDev</id>
@@ -46,11 +51,14 @@
             <name>Lavalink Repository</name>
             <url>https://maven.lavalink.dev/snapshots</url>
         </repository>
+
+        <!-- LavaSrc -->
         <repository>
             <id>TopiWTF-releases</id>
             <name>Topis Maven Repo</name>
             <url>https://maven.topi.wtf/releases</url>
         </repository>
+
         <!-- Chew's Maven Repo for JDA-Chewtils -->
         <repository>
             <id>chew</id>
@@ -60,7 +68,7 @@
     </repositories>
 
     <dependencies>
-        <!-- Discord Dependencies -->
+        <!-- Discord API Dependencies -->
         <dependency>
             <groupId>net.dv8tion</groupId> 
             <artifactId>JDA</artifactId> 
@@ -73,7 +81,34 @@
             <scope>compile</scope>
             <type>pom</type>
         </dependency>
-        
+
+        <!-- DAVE Protocol (for voice channel) -->
+		    <dependency>
+		        <groupId>club.minnced</groupId>
+		        <artifactId>jdave-api</artifactId>
+		        <version>0.1.7</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>club.minnced</groupId>
+		        <artifactId>jdave-native-linux-x86-64</artifactId>
+		        <version>0.1.7</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>club.minnced</groupId>
+		        <artifactId>jdave-native-linux-aarch64</artifactId>
+		        <version>0.1.7</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>club.minnced</groupId>
+		        <artifactId>jdave-native-win-x86-64</artifactId>
+		        <version>0.1.7</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>club.minnced</groupId>
+		        <artifactId>jdave-native-darwin</artifactId>
+		        <version>0.1.7</version>
+		    </dependency>
+
         <!-- Music Dependencies -->
         <dependency>
             <groupId>dev.arbjerg</groupId>
@@ -189,7 +224,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
 </project>
