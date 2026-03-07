@@ -245,7 +245,7 @@ public class Listener extends ListenerAdapter
             }
     	}
     	else {
-    		AudioTrack track = pl.getTracks().get(Integer.parseInt(Objects.requireNonNull(Objects.requireNonNull(event.getButton()).getId()))-1);
+    		AudioTrack track = pl.getTracks().get(Integer.parseInt(event.getComponentId()) - 1);
     		if(bot.getConfig().isTooLong(track))
             {
     		    event.getMessage().delete().queue();

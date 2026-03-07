@@ -31,13 +31,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.actionrow.ActionRowChildComponent;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.ActionComponent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.util.*;
@@ -129,11 +129,11 @@ public class SearchCmd extends MusicCommand {
             MessageEditAction ma = m.editMessage(FormatUtil.filter(
                     event.getClient().getSuccess() + "`" + args + "` 검색 결과:"));
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(Objects.requireNonNull(event.getGuild()).getSelfMember().getColor());
+            eb.setColor(Objects.requireNonNull(event.getGuild()).getSelfMember().getColors().getPrimary());
 
             //버튼 생성
             StringBuilder result = new StringBuilder();
-            LinkedList<ActionComponent> actionRow = new LinkedList<>();
+            LinkedList<ActionRowChildComponent> actionRow = new LinkedList<>();
             for (int i = 0; i < 10 && i < playlist.getTracks().size(); i++) {
                 AudioTrack track = playlist.getTracks().get(i);
                 actionRow.add(Button.primary(String.valueOf(i + 1), String.valueOf(i + 1)));
