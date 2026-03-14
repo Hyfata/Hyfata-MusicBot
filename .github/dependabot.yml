@@ -35,6 +35,11 @@ updates:
     ignore:
       - dependency-name: "junit"
       - dependency-name: "org.hamcrest:*"
+    # 여러 업데이트를 하나의 PR로 묶음
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
     # 이 업데이트가 릴리즈용임을 구분하기 위한 라벨
     labels:
       - "dependencies"
