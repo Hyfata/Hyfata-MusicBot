@@ -20,8 +20,10 @@ import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.audio.RequestMetadata;
 import com.jagrosh.jmusicbot.commands.music.SearchCmd;
+import com.jagrosh.jmusicbot.commands.music.SyncLyricsCmd;
 import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
+import com.jagrosh.jmusicbot.synclyric.LyricNotFoundException;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
 import com.jagrosh.jmusicbot.utils.RnjsskaUtil;
@@ -171,6 +173,26 @@ public class Listener extends ListenerAdapter
                 value = RepeatMode.OFF;
             settings.setRepeatMode(value);
             event.editMessage(handler.getNowPlaying(event.getJDA())).queue();
+        }
+        else if (event.getComponentId().equals("sync_lyric")){
+            if (RnjsskaUtil.hasNoTrackPermission(handler, event.getMember())) {
+                return;
+            }
+            bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
+            bot.getSyncLyricHandler().setLastLyricMessage(event.getMessage());
+            try {
+                MessageEditData msg = handler.getSyncLyric().getLyric(event.getJDA(), 0);
+                if (msg != null)
+                    event.editMessage(msg).queue();
+                else
+                    event.deferEdit().queue();
+            } catch (LyricNotFoundException e) {
+                event.editMessage(bot.getConfig().getWarning() + SyncLyricsCmd.LYRIC_NOT_FOUND).setEmbeds().setComponents().queue();
+                bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
+            } catch (Exception e) {
+                event.editMessage(bot.getConfig().getError() + SyncLyricsCmd.LYRIC_ERROR + e.getMessage()).setEmbeds().setComponents().queue();
+                bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
+            }
         }
     	else if (user != null && Objects.requireNonNull(event.getMember()).getUser().equals(user)) {
     		searchCmdClicked(event);
