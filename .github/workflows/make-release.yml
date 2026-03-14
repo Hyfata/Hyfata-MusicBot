@@ -134,7 +134,8 @@ jobs:
             cd ${{ secrets.REMOTE_TARGET_DIR }}
 
             # Change the bot jar file name
-            ln -sf Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar Hyfata-MusicBot-latest.jar
+            mv Hyfata-MusicBot-${{ needs.build_jar.outputs.app_version }}.jar Hyfata-MusicBot-latest.jar
+            chmod +x Hyfata-MusicBot-latest.jar
             
             # Restart the bot.
             # It should be need "restart.sh"
