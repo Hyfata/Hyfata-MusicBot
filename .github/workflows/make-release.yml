@@ -114,7 +114,7 @@ jobs:
           path: .
 
       - name: Deploy to Server via SSH
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
