@@ -1,0 +1,47 @@
+version: 2
+registries:
+  duncte123:
+    type: maven-repository
+    url: https://m2.duncte123.dev/releases
+  dv8tion:
+    type: maven-repository
+    url: https://m2.dv8tion.net/releases
+  jitpack:
+    type: maven-repository
+    url: https://jitpack.io
+  lavalink:
+    type: maven-repository
+    url: https://maven.lavalink.dev/releases
+  topi-wtf:
+    type: maven-repository
+    url: https://maven.topi.wtf/releases
+  chew-pro:
+    type: maven-repository
+    url: https://m2.chew.pro/releases
+  cloudsmith-arcane:
+    type: maven-repository
+    url: https://dl.cloudsmith.io/public/arcane/archive/maven/
+
+updates:
+  # Maven (pom.xml) 의존성 자동 업데이트
+  - package-ecosystem: "maven"
+    directory: "/"
+    # 등록한 모든 저장소에서 업데이트를 확인하도록 설정
+    registries: "*"
+    schedule:
+      interval: "weekly" # 매주 확인 (daily, monthly 등으로 변경 가능)
+    open-pull-requests-limit: 10
+    # 실행에 영향을 주지 않는 테스트 의존성은 업데이트 제외
+    ignore:
+      - dependency-name: "junit"
+      - dependency-name: "org.hamcrest:*"
+    # 이 업데이트가 릴리즈용임을 구분하기 위한 라벨
+    labels:
+      - "dependencies"
+      - "auto-release"
+
+  # GitHub Actions 버전 자동 업데이트
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
