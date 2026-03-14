@@ -124,7 +124,7 @@ jobs:
           target: ${{ secrets.REMOTE_TARGET_DIR }}
 
       - name: Restart Bot Service
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
