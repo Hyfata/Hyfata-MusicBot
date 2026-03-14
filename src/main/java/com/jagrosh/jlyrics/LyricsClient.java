@@ -24,10 +24,8 @@ import org.json.XML;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
-import org.jsoup.safety.Safelist;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,8 +43,6 @@ public class LyricsClient
 {
     private final Config config = ConfigFactory.load("lyrics.conf");
     private final HashMap<String, Lyrics> cache = new HashMap<>();
-    private final OutputSettings noPrettyPrint = new OutputSettings().prettyPrint(false);
-    private final Safelist newlineSafelist = Safelist.none().addTags("br", "p");
     private final Executor executor;
     private final String defaultSource, userAgent;
     private final int timeout;
@@ -248,10 +244,5 @@ public class LyricsClient
         } catch (Exception ignored) {
             return null;
         }
-    }
-
-    private String cleanWithNewlines(Element element)
-    {
-        return Jsoup.clean(Jsoup.clean(element.html(), newlineSafelist), "", Safelist.none(), noPrettyPrint);
     }
 }
