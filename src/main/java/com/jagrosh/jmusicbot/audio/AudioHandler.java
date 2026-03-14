@@ -262,7 +262,8 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             ActionRow actionRow2 = ActionRow.of(
                     Button.secondary("volumeDown", Emoji.fromUnicode("\uD83D\uDD09")),
                     Button.secondary("volumeUp", Emoji.fromUnicode("\uD83D\uDD0A")),
-                    Button.secondary("repeat", Emoji.fromFormatted(repeatMode.getEmoji()))
+                    Button.secondary("repeat", Emoji.fromFormatted(repeatMode.getEmoji())),
+                    Button.primary("sync_lyric", "📑 싱크 가사")
             );
             mb.setComponents(actionRow1, actionRow2);
             return mb.setEmbeds(eb.build()).build();
