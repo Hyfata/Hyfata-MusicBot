@@ -181,7 +181,6 @@ public class Listener extends ListenerAdapter
                 return;
             }
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
-            bot.getSyncLyricHandler().setLastLyricMessage(event.getMessage());
 
             event.editMessage(bot.getConfig().getLoading() + " 싱크 가사를 불러오는 중...")
                 .setEmbeds().setComponents()
@@ -189,8 +188,10 @@ public class Listener extends ListenerAdapter
                     long ping = m.getTimeEdited() == null ? event.getTimeCreated().until(OffsetDateTime.now(), ChronoUnit.MILLIS) : event.getTimeCreated().until(m.getTimeEdited(), ChronoUnit.MILLIS);
                     try {
                         MessageEditData lyricMsg = Objects.requireNonNull(handler).getSyncLyric().getLyric(event.getJDA(), ping);
-                        if (lyricMsg != null)
+                        if (lyricMsg != null) {
                             m.editMessage(lyricMsg).queue();
+                            bot.getSyncLyricHandler().setLastLyricMessage(m);
+                        }
                         else
                             m.editMessage(MessageEditData.fromContent(bot.getConfig().getWarning() + " 음악이 재생 중이 아니거나 가사가 존재하지 않습니다.")).queue();
                     } catch (LyricNotFoundException e) {
