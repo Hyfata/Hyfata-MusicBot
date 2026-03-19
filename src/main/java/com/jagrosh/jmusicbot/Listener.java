@@ -30,6 +30,7 @@ import com.jagrosh.jmusicbot.utils.RnjsskaUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -180,19 +181,24 @@ public class Listener extends ListenerAdapter
             }
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
             bot.getSyncLyricHandler().setLastLyricMessage(event.getMessage());
-            try {
-                MessageEditData msg = handler.getSyncLyric().getLyric(event.getJDA(), 0);
-                if (msg != null)
-                    event.editMessage(msg).queue();
-                else
-                    event.deferEdit().queue();
-            } catch (LyricNotFoundException e) {
-                event.editMessage(bot.getConfig().getWarning() + SyncLyricsCmd.LYRIC_NOT_FOUND).setEmbeds().setComponents().queue();
-                bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
-            } catch (Exception e) {
-                event.editMessage(bot.getConfig().getError() + SyncLyricsCmd.LYRIC_ERROR + e.getMessage()).setEmbeds().setComponents().queue();
-                bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
-            }
+
+            event.editMessage(MessageEditData.fromContent(bot.getConfig().getLoading() + " 싱크 가사를 불러오는 중..."))
+                .queue(hook -> hook.retrieveOriginal().queue(m -> {
+                    long ping = event.getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
+                    try {
+                        MessageEditData lyricMsg = Objects.requireNonNull(handler).getSyncLyric().getLyric(event.getJDA(), ping);
+                        if (lyricMsg != null)
+                            m.editMessage(lyricMsg).queue();
+                        else
+                            m.editMessage(MessageEditData.fromContent(bot.getConfig().getWarning() + " 음악이 재생 중이 아니거나 가사가 존재하지 않습니다.")).queue();
+                    } catch (LyricNotFoundException e) {
+                        event.editMessage(bot.getConfig().getWarning() + SyncLyricsCmd.LYRIC_NOT_FOUND).setEmbeds().setComponents().queue();
+                        bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
+                    } catch (Exception e) {
+                        event.editMessage(bot.getConfig().getError() + SyncLyricsCmd.LYRIC_ERROR + e.getMessage()).setEmbeds().setComponents().queue();
+                        bot.getSyncLyricHandler().clearLastLyricMessage(event.getGuild());
+                    }
+                }));
         }
     	else if (user != null && Objects.requireNonNull(event.getMember()).getUser().equals(user)) {
     		searchCmdClicked(event);
