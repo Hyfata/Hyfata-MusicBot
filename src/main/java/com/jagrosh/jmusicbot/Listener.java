@@ -30,6 +30,7 @@ import com.jagrosh.jmusicbot.utils.RnjsskaUtil;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -182,9 +183,10 @@ public class Listener extends ListenerAdapter
             bot.getNowplayingHandler().clearLastNPMessage(event.getGuild());
             bot.getSyncLyricHandler().setLastLyricMessage(event.getMessage());
 
-            event.editMessage(MessageEditData.fromContent(bot.getConfig().getLoading() + " 싱크 가사를 불러오는 중..."))
+            event.editMessage(bot.getConfig().getLoading() + " 싱크 가사를 불러오는 중...")
+                .setEmbeds().setComponents()
                 .queue(hook -> hook.retrieveOriginal().queue(m -> {
-                    long ping = event.getTimeCreated().until(m.getTimeCreated(), ChronoUnit.MILLIS);
+                    long ping = m.getTimeEdited() == null ? event.getTimeCreated().until(OffsetDateTime.now(), ChronoUnit.MILLIS) : event.getTimeCreated().until(m.getTimeEdited(), ChronoUnit.MILLIS);
                     try {
                         MessageEditData lyricMsg = Objects.requireNonNull(handler).getSyncLyric().getLyric(event.getJDA(), ping);
                         if (lyricMsg != null)
