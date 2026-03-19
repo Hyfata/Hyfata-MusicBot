@@ -90,6 +90,11 @@ public class SearchCmd extends MusicCommand {
             event.reply(event.getClient().getError() + " 검색어를 포함하십시오.").setEphemeral(true).queue();
             return;
         }
+        // TODO: Spotify 검색이 다시 가능해지면 이 부분을 제거
+        if (platformValue.equalsIgnoreCase("spsearch:")) {
+            event.reply(event.getClient().getError() + " Spotify 검색은 현재 일시적으로 사용할 수 없습니다. 자세한 사항은 아래 문서를 확인하십시오.\nhttps://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security").setEphemeral(true).queue();
+            return;
+        }
         if (!platformValue.isEmpty()) {
             searchPrefix = platformValue;
         }
