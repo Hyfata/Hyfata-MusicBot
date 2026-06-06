@@ -72,7 +72,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId> 
             <artifactId>JDA</artifactId> 
-            <version>6.4.1</version>
+            <version>6.4.2</version>
         </dependency>
         <dependency>
             <groupId>pw.chew</groupId>
@@ -147,12 +147,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.33</version>
+            <version>1.5.34</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
-            <version>1.4.8</version>
+            <version>1.4.9</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
