@@ -118,7 +118,7 @@
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
-            <version>1.18.1</version>
+            <version>1.18.2</version>
         </dependency>
         <dependency>
             <groupId>com.dunctebot</groupId>
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.6.0</version>
+            <version>1.6.1</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
