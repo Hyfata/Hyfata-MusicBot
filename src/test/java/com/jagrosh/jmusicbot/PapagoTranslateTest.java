@@ -60,7 +60,7 @@ public class PapagoTranslateTest {
     }
 
     private static HttpURLConnection getConnection(String lang, String text) throws URISyntaxException, IOException {
-        URL url = new URI("https://papago.naver.com/apis/n2mt/translate").toURL();
+        URL url = new URI("https://papago.naver.com/api/text/translation").toURL();
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");

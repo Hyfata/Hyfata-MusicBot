@@ -84,7 +84,7 @@ public class PapagoAPI {
     }
 
     private static HttpURLConnection getTranslatorConnection(String lang, String text) throws URISyntaxException, IOException {
-        URL url = new URI("https://papago.naver.com/apis/n2mt/translate").toURL();
+        URL url = new URI("https://papago.naver.com/api/text/translation").toURL();
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -100,7 +100,7 @@ public class PapagoAPI {
     }
 
     private static HttpURLConnection getTlitConnection(String lang, String text) throws Exception {
-        HttpURLConnection connection = (HttpURLConnection) new URI("https://papago.naver.com/apis/tlit/wtp").toURL().openConnection();
+        HttpURLConnection connection = (HttpURLConnection) new URI("https://papago.naver.com/api/tlit/wtp").toURL().openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         connection.setRequestProperty("Accept-Language", "ko");

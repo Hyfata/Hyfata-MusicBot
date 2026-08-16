@@ -78,7 +78,7 @@ public class PapagoTlitTest {
     }
 
     private static HttpURLConnection getConnection(String lang, String text) throws Exception {
-        HttpURLConnection connection = (HttpURLConnection) new java.net.URI("https://papago.naver.com/apis/tlit/wtp").toURL().openConnection();
+        HttpURLConnection connection = (HttpURLConnection) new java.net.URI("https://papago.naver.com/api/tlit/wtp").toURL().openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         connection.setRequestProperty("Accept-Language", "ko");
