@@ -19,6 +19,7 @@ import com.dunctebot.sourcemanagers.DuncteBotSources;
 import com.github.topi314.lavasrc.applemusic.AppleMusicSourceManager;
 import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.JMusicBot;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -32,7 +33,9 @@ import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceM
 import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
-import dev.lavalink.youtube.clients.Web;
+import dev.lavalink.youtube.YoutubeSourceOptions;
+import dev.lavalink.youtube.clients.*;
+import dev.lavalink.youtube.clients.skeleton.Client;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.Objects;
@@ -60,9 +63,16 @@ public class PlayerManager extends DefaultAudioPlayerManager
 
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(this::registerSourceManager);
 
-        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true);
-        Web.setPoTokenAndVisitorData(bot.getConfig().getYtPoToken(), bot.getConfig().getYtVisitorData());
+        YoutubeSourceOptions options = new YoutubeSourceOptions()
+                // The base URL of your remote cipher server & the password to authenticate with your remote cipher server, along with an identifier for metrics.
+                .setRemoteCipher(bot.getConfig().getYtCipherUrl(), bot.getConfig().getYtCipherPassword(), bot.getConfig().getYtCipherUserAgent())
+                .setAllowSearch(true);
+        JMusicBot.LOG.info("Youtube Source Cipher URL: {}", options.getRemoteCipherUrl());
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(options,
+                new Music(), new AndroidVr(), new Web(), new WebEmbedded(), new Tv(), new MWeb(), new AndroidMusic(),
+                new Ios(), new TvHtml5Simply()); // add all clients without `ANDROID`
         yt.setPlaylistPageCount(bot.getConfig().getMaxYTPlaylistPages());
+        yt.useOauth2(null, false);
         registerSourceManager(yt);
 
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());

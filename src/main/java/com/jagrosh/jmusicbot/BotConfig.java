@@ -44,7 +44,7 @@ public class BotConfig {
             spotifyId, spotifySecret, spotifyCountry,
             appleToken, appleCountry,
             musixmatchToken,
-            ytPoToken, ytVisitorData;
+            ytCipherUrl, ytCipherPassword, ytCipherUserAgent;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private int maxYTPlaylistPages;
@@ -104,8 +104,9 @@ public class BotConfig {
             appleToken = config.getString("appleToken");
             appleCountry = config.getString("appleCountry");
             musixmatchToken = config.getString("musixmatchToken");
-            ytPoToken = config.getString("ytPoToken");
-            ytVisitorData = config.getString("ytVisitorData");
+            ytCipherUrl = config.getString("ytCipherUrl");
+            ytCipherPassword = config.getString("ytCipherPassword");
+            ytCipherUserAgent = config.getString("ytCipherUserAgent");
             dbots = owner == 113156185389092864L;
 
             // we may need to write a new config file
@@ -360,12 +361,16 @@ public class BotConfig {
         return musixmatchToken;
     }
 
-    public String getYtVisitorData() {
-        return ytVisitorData;
+    public String getYtCipherUrl() {
+        return ytCipherUrl;
     }
 
-    public String getYtPoToken() {
-        return ytPoToken;
+    public String getYtCipherPassword() {
+        return ytCipherPassword;
+    }
+
+    public String getYtCipherUserAgent() {
+        return ytCipherUserAgent;
     }
 
     public Config getTransforms() {
