@@ -19,6 +19,7 @@ public class SyncLyricAPI {
     private List<String> translations = null;
     private List<String> tlits = null;
 
+    // Double time(seconds), String lyric
     public LinkedHashMap<Double, String> getLyric(Bot bot, String track, String artist) throws Exception {
         JSONObject json = JSON.getJsonObjectFromConnection(getMusixmatchConnection(bot, track, artist));
         int statusCode = json.getJSONObject("message").getJSONObject("header").getInt("status_code");

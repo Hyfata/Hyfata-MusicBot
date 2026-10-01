@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * SyncLyric class for generating synchronized lyrics.
+ * This object declared in {@link AudioHandler}
+ */
 public class SyncLyric {
     private final Bot bot;
     private final AudioHandler audioHandler;
@@ -67,6 +71,18 @@ public class SyncLyric {
     }
 
     boolean hasTTSPlayed = false;
+
+    /**
+     * Checks the current state of the audio track and updates the lyrics display if necessary.
+     * This method polls for changes in the currently playing track, such as a new song starting,
+     * the current song repeating, or the track position moving forward or backward. Based on these
+     * changes, it determines whether the lyrics need to be updated and generates a new message if needed.
+     *
+     * @param jda The {@code JDA} instance used to interact with the Discord API.
+     * @return A {@code MessageEditData} object containing the updated lyrics and associated metadata
+     *         if a lyric update is necessary, or {@code null} otherwise.
+     * @throws Exception If an error occurs while initializing or updating the track information or lyrics data.
+     */
     protected MessageEditData pollLyricUpdate(JDA jda) throws Exception {
         AudioTrack track = getPlayingTrack();
         if (!isNotTTS(track)) {
@@ -108,7 +124,7 @@ public class SyncLyric {
         EmbedBuilder eb = new EmbedBuilder();
 
         calculateCurrentLyricIndex(getTrackPosition(track));
-        eb.setColor(guild.getSelfMember().getColor());
+        eb.setColor(guild.getSelfMember().getColors().getPrimary());
         eb.setDescription(generateLyricString()); // sync lyric
 
         // playing text
@@ -128,7 +144,7 @@ public class SyncLyric {
                 .addContent(TimeUtil.formatTime(track.getPosition())).addContent(" / ").addContent(TimeUtil.formatTime(track.getDuration()))
                 .addContent("`\n\n");
 
-        // lyric
+        // translated lyric by Papago
         if (currentLyricIndex >= 0) {
             if (tlits != null) {
                 mb.addContent("**").addContent(tlits.get(currentLyricIndex)).addContent("**\n");
@@ -145,8 +161,7 @@ public class SyncLyric {
 
     private String generateLyricString() {
         StringBuilder result = new StringBuilder();
-        int firstIndex;
-        int lastIndex;
+        int firstIndex, lastIndex;
         int totalLyricSize = lyricLinesByTime.size();
         if (getLastLyric().isEmpty())
             totalLyricSize--;

@@ -34,6 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author John Grosh (john.a.grosh@gmail.com)
+ * <p>
+ * SyncLyricHandler class for handling generated synclyric messages.
+ * <p>
+ * This object declared in {@link Bot}
  */
 public class SyncLyricHandler {
     private final Bot bot;
@@ -73,7 +77,7 @@ public class SyncLyricHandler {
             }
             AudioHandler handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
 
-            // set msg
+            // set msg for edit synclyric
             MessageEditData msg;
             boolean error = false;
             try {
@@ -95,14 +99,14 @@ public class SyncLyricHandler {
                 error = true;
             }
 
-            // edit message
+            // edit message if msg is not null
             try {
                 if (msg != null && !error) {
-                    tc.editMessageById(pair.getValue(), msg).queue(m -> {
-                    }, t -> lastLyric.remove(guildId));
+                    tc.editMessageById(pair.getValue(), msg).queue(_ -> {
+                    }, _ -> lastLyric.remove(guildId));
                 } else if (msg != null) {
-                    tc.editMessageById(pair.getValue(), msg).setEmbeds().queue(m -> {
-                    }, t -> lastLyric.remove(guildId));
+                    tc.editMessageById(pair.getValue(), msg).setEmbeds().queue(_ -> {
+                    }, _ -> lastLyric.remove(guildId));
                 }
             } catch (Exception e) {
                 toRemove.add(guildId);
