@@ -49,11 +49,30 @@ public class LavaLyricTest
     @Test
     public void loadSpotifyLyrics()
     {
-        // Read Spotify credentials from config.txt
+        // Read Spotify credentials from config.txt (skip test if missing)
         Config config = ConfigFactory.parseFile(new File("config.txt"));
-        String spotifyId = config.getString("spotifyId");
-        String spotifySecret = config.getString("spotifySecret");
-        String spotifyCountry = config.getString("spotifyCountry");
+        Assume.assumeTrue("Spotify credentials missing in config.txt, skipping test",
+                config.hasPath("spotifyId") && config.hasPath("spotifySecret") && config.hasPath("spotifyCountry"));
+
+        String spotifyId;
+        String spotifySecret;
+        String spotifyCountry;
+        try
+        {
+            spotifyId = config.getString("spotifyId");
+            spotifySecret = config.getString("spotifySecret");
+            spotifyCountry = config.getString("spotifyCountry");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Spotify credentials unreadable in config.txt, skipping test: " + e.getMessage());
+            Assume.assumeNoException(e);
+            return;
+        }
+        Assume.assumeTrue("Spotify credentials not configured in config.txt, skipping test",
+                spotifyId != null && !spotifyId.isEmpty() && !spotifyId.equals("CLIENT_ID_HERE")
+                        && spotifySecret != null && !spotifySecret.isEmpty() && !spotifySecret.equals("CLIENT_SECRET_HERE")
+                        && spotifyCountry != null && !spotifyCountry.isEmpty() && !spotifyCountry.equals("COUNTRY_CODE_HERE"));
 
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         SpotifySourceManager spotify = new SpotifySourceManager(null, spotifyId, spotifySecret, spotifyCountry, playerManager);
