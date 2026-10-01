@@ -2,23 +2,101 @@ package com.jagrosh.jmusicbot;
 
 import com.github.topi314.lavalyrics.LyricsManager;
 import com.github.topi314.lavalyrics.lyrics.AudioLyrics;
+import com.github.topi314.lavasrc.lrclib.LrcLibLyricsManager;
+import com.github.topi314.lavasrc.spotify.SpotifySourceManager;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.track.AudioItem;
+import com.sedmelluq.discord.lavaplayer.track.AudioReference;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.YoutubeSourceOptions;
+import dev.lavalink.youtube.clients.AndroidVr;
+import dev.lavalink.youtube.clients.Music;
+import dev.lavalink.youtube.clients.TvHtml5Simply;
+import org.junit.Assume;
+import org.junit.Test;
 
-public class LavaLyricTest {
-    static void main() {
-        var lyricsManager = new LyricsManager();
-// 이미 등록된 LavaSrc 소스 매니저 인스턴스를 그대로 등록
-        lyricsManager.registerLyricsManager(spotifySourceManager); // spDc 쿠키 필요
-        lyricsManager.registerLyricsManager(youtubeSourceManager);
-// deezer 등 다른 소스도 가능
+import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-// 트랙 재생 시작 시
-        AudioLyrics lyrics = lyricsManager.loadLyrics(track);
-        if (lyrics != null && lyrics.getLines() != null) {
-            for (AudioLyrics.Line line : lyrics.getLines()) {
-                double time = line.getTimestamp() / 1000.0; // 밀리초 int → 기존 double time
-                String content = line.getLine();            // 기존 content
+public class LavaLyricTest
+{
+    @Test
+    public void loadYouTubeLyrics()
+    {
+        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(
+                new YoutubeSourceOptions().setAllowSearch(true),
+                new Music(), new AndroidVr(), new TvHtml5Simply());
+        playerManager.registerSourceManager(yt);
+
+        // LrcLib can look up lyrics from track metadata without extra authentication
+        LyricsManager lyricsManager = new LyricsManager();
+        lyricsManager.registerLyricsManager(new LrcLibLyricsManager());
+
+        // Sample YouTube track for testing (Rick Astley - Never Gonna Give You Up)
+        AudioItem item = yt.loadItem(playerManager, new AudioReference("https://www.youtube.com/watch?v=dQw4w9WgXcQ", null));
+        Assume.assumeTrue("Failed to load track (network/auth issue)", item instanceof AudioTrack);
+        AudioTrack track = (AudioTrack) item;
+
+        System.out.println(getSyncedLyrics(lyricsManager.loadLyrics(track)));
+    }
+
+    @Test
+    public void loadSpotifyLyrics()
+    {
+        // Read Spotify credentials from config.txt
+        Config config = ConfigFactory.parseFile(new File("config.txt"));
+        String spotifyId = config.getString("spotifyId");
+        String spotifySecret = config.getString("spotifySecret");
+        String spotifyCountry = config.getString("spotifyCountry");
+
+        AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
+        SpotifySourceManager spotify = new SpotifySourceManager(null, spotifyId, spotifySecret, spotifyCountry, playerManager);
+        playerManager.registerSourceManager(spotify);
+
+        LyricsManager lyricsManager = new LyricsManager();
+        lyricsManager.registerLyricsManager(spotify);
+
+        AudioItem item;
+        try
+        {
+            // Sample Spotify track for testing (Rick Astley - Never Gonna Give You Up)
+            item = spotify.loadItem(playerManager, new AudioReference("https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC", null));
+        }
+        catch (Exception e)
+        {
+            // Skip instead of failing when the Spotify API is unreachable (e.g. lyrics API 403 on free accounts)
+            System.out.println("Failed to access Spotify API: " + e.getMessage());
+            Assume.assumeNoException(e);
+            return;
+        }
+        Assume.assumeTrue("Failed to load track", item instanceof AudioTrack);
+        AudioTrack track = (AudioTrack) item;
+
+        System.out.println(getSyncedLyrics(lyricsManager.loadLyrics(track)));
+    }
+
+    private Map<Double, String> getSyncedLyrics(AudioLyrics lyrics)
+    {
+        Map<Double, String> result = new LinkedHashMap<>();
+        if (lyrics != null && lyrics.getLines() != null)
+        {
+            var lines = lyrics.getLines();
+            for (int i = 0; i < lines.size(); i++)
+            {
+                AudioLyrics.Line line = lines.get(i);
+                double time = line.getTimestamp().toMillis() / 1000.0; // Duration converted to legacy double time in seconds
+                String content = line.getLine();                       // legacy content
+                if (content.isEmpty() && i < lines.size() - 1)
+                    content = "♪";                                     // Mark non-trailing empty lines as an interlude
+                result.put(time, content);
             }
         }
-
+        return result;
     }
 }

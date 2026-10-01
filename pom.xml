@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jagrosh</groupId>
     <artifactId>MusicBot</artifactId>
-    <version>1.2.23</version>
+    <version>1.3.0</version>
     <packaging>jar</packaging>
     
     <repositories>
@@ -136,6 +136,13 @@
             <groupId>com.github.topi314.lavasrc</groupId>
             <artifactId>protocol-jvm</artifactId>
             <version>4.8.3</version>
+        </dependency>
+
+        <!-- LavaLyrics language detection -->
+        <dependency>
+            <groupId>com.github.pemistahl</groupId>
+            <artifactId>lingua</artifactId>
+            <version>1.2.2</version>
         </dependency>
 
         <!-- Misc Internal Dependencies -->

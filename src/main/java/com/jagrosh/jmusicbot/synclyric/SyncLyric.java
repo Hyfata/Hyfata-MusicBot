@@ -42,15 +42,7 @@ public class SyncLyric {
         SyncLyricAPI api = new SyncLyricAPI();
         this.trackUri = track.getInfo().uri;
 
-        if (track.getInfo().isrc != null) {
-            this.lyricLinesByTime = api.getLyricByIsrc(bot, track.getInfo().isrc);
-        } else {
-            this.lyricLinesByTime = api.getLyric(
-                    bot,
-                    track.getInfo().title,
-                    track.getInfo().author.replace(" - Topic", "")
-            );
-        }
+        this.lyricLinesByTime = api.getLyric(track);
         this.lyricTimestamps = new ArrayList<>(lyricLinesByTime.keySet());
         this.translations = api.getTranslations();
         this.tlits = api.getTlits();
@@ -155,7 +147,7 @@ public class SyncLyric {
             if (tlits != null || translations != null)
                 mb.addContent("\n번역, 발음: [Papago](https://papago.naver.com)\n");
         }
-        mb.addContent("가사 제공: [Musixmatch](https://www.musixmatch.com)");
+        mb.addContent("가사 제공: [LRCLIB](https://lrclib.net/)");
         return MessageEditData.fromCreateData(mb.setEmbeds(eb.build()).build());
     }
 
