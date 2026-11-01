@@ -56,7 +56,7 @@
         <repository>
             <id>TopiWTF-releases</id>
             <name>Topis Maven Repo</name>
-            <url>https://maven.topi.wtf/releases</url>
+            <url>https://maven.topi.wtf/snapshots</url>
         </repository>
 
         <!-- Chew's Maven Repo for JDA-Chewtils -->
@@ -135,12 +135,12 @@
         <dependency>
             <groupId>com.github.topi314.lavasrc</groupId>
             <artifactId>lavasrc</artifactId>
-            <version>4.8.3</version>
+            <version>c62ae61d14c5753a3f78dc84779c7fb9ec183c15</version>
         </dependency>
         <dependency>
             <groupId>com.github.topi314.lavasrc</groupId>
             <artifactId>protocol-jvm</artifactId>
-            <version>4.8.3</version>
+            <version>c62ae61d14c5753a3f78dc84779c7fb9ec183c15</version>
         </dependency>
 
         <!-- LavaLyrics language detection -->
