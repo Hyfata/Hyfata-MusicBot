@@ -123,7 +123,7 @@
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
-            <version>f45bbb7aebfcbc1c553769e04af6cd43afa8b7c3-SNAPSHOT</version> <!-- should be change to release version -->
+            <version>2be8e542d3f6f178e048dca565892684c2e40177-SNAPSHOT</version> <!-- should be change to release version -->
         </dependency>
         <dependency>
             <groupId>com.dunctebot</groupId>
